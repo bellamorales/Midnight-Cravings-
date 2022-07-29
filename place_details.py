@@ -8,7 +8,7 @@ client = googlemaps.Client(key='AIzaSyC1H9ZV4GICVuy_rY2sq4BqcQllJoWeKrU')
 
 
 def get_nearby_restaurants(
-    location, user_lang="en-US", user_region="US", radius=500, limit=-1,
+    location, user_lang="en-US", user_region="US", radius=5000, limit=-1,
     types=["restaurant", "meal_delivery", "meal_takeaway"]
     ) -> list[dict]:
     """Retrieves nearby restaurants that are open right now.

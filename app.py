@@ -15,7 +15,6 @@ app.config['SECRET_KEY'] = '159afc1053d04e47b66ac44bd36875fe'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 
-restaurants = None
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -38,21 +37,17 @@ def search():
     form = LocationForm()
     if form.validate_on_submit():
         city = form.City.data
-        global restaurants
-        restaurants = get_nearby_restaurants(get_coordinates(city), radius=50)
+        restaurants = get_nearby_restaurants(get_coordinates(city))
         # TODO: insert user location into database ONLY IF USER IS LOGGED-IN
+        return render_template('search.html', form=form, restaurants=restaurants)
 
-        return redirect(url_for('index'))
-    return render_template("search.html", form=form)
+    return render_template("search.html", form=form, restaurants=None)
 
 
 # Route for handling the index page logic
 @app.route("/", methods = ['GET','POST'])
 def index():
-    if request.method == "POST":
-        #if request.form.get("menu button") == "Go to menu":
-            return redirect(url_for('home'))
-    return render_template("index.html", restaurant=restaurants)
+    return render_template("index.html")
 
 
 # Route for handling the register page logic
