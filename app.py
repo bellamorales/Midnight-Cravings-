@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect,request, Markup
-from forms import RegistrationForm, LocationForm
+from forms import RegistrationForm, LocationForm, LoginForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -82,16 +82,18 @@ def register():
 # Route for handling the login page logic
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
     error = None
-    if request.method == 'POST':
-        user_name = request.form.get('username')
-        user = User.query.filter_by(username=user_name).first()
-        #if not user or not user.password:
-        if request.form['username'] != user.username or request.form['password'] != user.password:
-            error = 'Invalid Credentials. Please try again.'
-        else:
-            return redirect(url_for('home'))
-    return render_template('login.html', error=error)
+    if form.validate_on_submit():
+        if request.method == 'POST':
+            user_name = request.form.get('username')
+            user = User.query.filter_by(username=user_name).first()
+            #if not user or not user.password:
+            if request.form['username'] != user.username or request.form['password'] != user.password:
+                error = 'Invalid Credentials. Please try again.'
+            else:
+                return redirect(url_for('home'))
+    return render_template('login.html', error=error, form=form)
 
 
 if __name__ == '__main__':
