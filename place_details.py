@@ -1,4 +1,4 @@
-from urllib import response
+from urllib import response, error
 import googlemaps
 import json
 from datetime import datetime
@@ -46,7 +46,7 @@ def get_nearby_restaurants(
         open_now: boolean
     """
     # Make request using google places API python library
-    response = client.places(
+    api_response = client.places(
         query="restuarant", location=location, radius=radius,
         region=user_region, language=user_lang, open_now=True,
         type=types
@@ -54,41 +54,57 @@ def get_nearby_restaurants(
 
     # return value is list of dicts of open nearby restaurants 
     nearby_restaurants = []
+    message = None
 
-    if response["status"] != "OK":
-        return nearby_restaurants
+    while True:
+        if api_response["status"] != "OK":
+            return nearby_restaurants
+        # list of dicts representing restaurants returned by request 
+        restaurant_results = api_response["results"]
 
-    # list of dicts representing restaurants returned by request 
-    results = response["results"]    
+        # print(json.dumps(restaurant_results, indent=4))
+
+        # filter out only the data we want (see below) from the result data 
+        for restaurant in restaurant_results:
+            # Only return restaurants that are both operational and open now. 
+            if restaurant['business_status'] == "OPERATIONAL":
+                # data we want: name, place_id, formatted_address, types,
+                # price_level, rating, open_now
+                r = {
+                    "name": restaurant["name"],
+                    "place_id": restaurant["place_id"],
+                    "formatted_address": restaurant["formatted_address"],
+                    "types": restaurant["types"],
+                    # "price_level": restaurant["price_level"],
+                    "rating": restaurant["rating"],
+                    "open_now": restaurant['opening_hours']['open_now']
+                }
+
+                nearby_restaurants.append(r)
+
+        try:
+            if api_response["next_page_token"]:
+                api_response = client.places(
+                    page_token=api_response["next_page_token"]
+                )
+        except googlemaps.exceptions.ApiError:
+            message = f"ERRORED WITH NEXT_PAGE_TOKEN: {api_response['next_page_token']}"
+            break
+
 
     if type(limit) == int and limit > 0:
-        results = results[0: limit]
-
-    # filter out only the data we want (see below) from the result data 
-    for restaurant in results:
-        # Only return restaurants that are both operational and open now. 
-        if (restaurant['business_status'] == "OPERATIONAL"
-            and restaurant['opening_hours']['open_now']):
-            # data we want: name, place_id, formatted_address, types,
-            # price_level, rating, open_now
-            r = {
-                "name": restaurant["name"],
-                "place_id": restaurant["place_id"],
-                "formatted_address": restaurant["formatted_address"],
-                "types": restaurant["types"],
-                "price_level": restaurant["price_level"],
-                "rating": restaurant["rating"],
-                "open_now": restaurant['opening_hours']['open_now']
-            }
-
-            nearby_restaurants.append(r)
+        nearby_restaurants = nearby_restaurants[0: limit]
+    
+    if message is not None:
+        nearby_restaurants.append(message)
 
     return nearby_restaurants
 
 
-# restaurants = get_nearby_restaurants((42.55711747257572, -87.82794582470426), limit=100)
+# restaurants = get_nearby_restaurants((42.580842, -87.821801))
 
 # print(json.dumps(restaurants, indent=4))
+# print(len(restaurants))
 
 # assert nearby_restaurants["Uptown Restaurant"]["open_now"] == True
 
