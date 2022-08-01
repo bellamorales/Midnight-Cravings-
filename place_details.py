@@ -8,23 +8,22 @@ client = googlemaps.Client(key='AIzaSyC1H9ZV4GICVuy_rY2sq4BqcQllJoWeKrU')
 
 
 def get_nearby_restaurants(
-    location, user_lang="en-US", user_region="US", radius=500, limit=-1,
+    location, user_lang="en-US", user_region="US", radius=5000, limit=-1,
     types=["restaurant", "meal_delivery", "meal_takeaway"]
-    ) -> dict:
-    """
-    Retrieves nearby restaurants that are open right now.
+    ) -> list[dict]:
+    """Retrieves nearby restaurants that are open right now.
 
     :param location: The latitude/longitude value for which you wish to obtain the
                      closest, human-readable address.
-    :type location: string, dict, list, or tuple
+    :type location: str, dict, list, or tuple
 
     :param user_lang: The language in which to return results, optional parameter.
-    :type user_lang: string
+    :type user_lang: str
 
     :param user_region: The region code, optional parameter.
         See more @ https://developers.google.com/places/web-service/search
 
-    :type user_region: string
+    :type user_region: str
 
     :param limit: The number of results to return, optional parameter.
     :type limit: int
@@ -33,15 +32,15 @@ def get_nearby_restaurants(
         The full list of supported types is available here:
         https://developers.google.com/places/supported_types
 
-    :type types: string, list of strings
+    :type types: list of str
 
     :param radius: Distance in meters within which to bias results, optional parameter.
     :type radius: int
 
-    :rtype: result list of dicts with the following keys:
-        place_id: string identifying restaurant in Google's Places API
-        formatted_address: string
-        types: list of strings identifying services at and classification of restaurant 
+    :rtype: list of dicts with the following keys:
+        place_id: str identifying restaurant in Google's Places API
+        formatted_address: str
+        types: list of str identifying services at and classification of restaurant 
         price_level: int on scale of 0 (least expensive) to 4 (most expensive)
         rating: float on scale of 0-5 
         open_now: boolean
