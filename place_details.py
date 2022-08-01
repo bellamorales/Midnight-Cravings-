@@ -101,10 +101,10 @@ def get_nearby_restaurants(
     return nearby_restaurants
 
 
-restaurants = get_nearby_restaurants((42.580842, -87.821801))
+# restaurants = get_nearby_restaurants((42.580842, -87.821801))
 
-print(json.dumps(restaurants, indent=4))
-print(len(restaurants))
+# print(json.dumps(restaurants, indent=4))
+# print(len(restaurants))
 
 # assert nearby_restaurants["Uptown Restaurant"]["open_now"] == True
 
