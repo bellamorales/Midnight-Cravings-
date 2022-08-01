@@ -4,7 +4,7 @@
 		<title>Log In</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/loginsignup.css" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/loginsignup.css') }}" />
 	</head>
   
   <body>
@@ -24,7 +24,7 @@
       </ul>
 
       <p><b>Already have a Midnight Cravings account?</b></p>
-      <a href="/login.html">Log In</a>
+      <a href="{{ url_for('login') }}">Log In</a>
     </div>
   </body>
 </html>
