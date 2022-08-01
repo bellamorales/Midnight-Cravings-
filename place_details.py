@@ -8,9 +8,9 @@ client = googlemaps.Client(key='AIzaSyC1H9ZV4GICVuy_rY2sq4BqcQllJoWeKrU')
 
 
 def get_nearby_restaurants(
-    location, user_lang="en-US", user_region="US", radius=5000, limit=-1,
+    location, user_lang="en-US", user_region="US", radius=5000, limit=0,
     types=["restaurant", "meal_delivery", "meal_takeaway"]
-    ) -> list[dict]:
+    ):
     """Retrieves nearby restaurants that are open right now.
 
     :param location: The latitude/longitude value for which you wish to obtain the
@@ -52,20 +52,25 @@ def get_nearby_restaurants(
         type=types
         )
 
-    if response["status"] != "OK":
-        return {}
-
-    results = response["results"]    
-
+    # return value is list of dicts of open nearby restaurants 
     nearby_restaurants = []
 
-    if limit != -1 and limit > 0:
+    if response["status"] != "OK":
+        return nearby_restaurants
+
+    # list of dicts representing restaurants returned by request 
+    results = response["results"]    
+
+    if type(limit) == int and limit > 0:
         results = results[0: limit]
 
+    # filter out only the data we want (see below) from the result data 
     for restaurant in results:
         # Only return restaurants that are both operational and open now. 
-        if (restaurant['business_status'] == "OPERATIONAL" 
+        if (restaurant['business_status'] == "OPERATIONAL"
             and restaurant['opening_hours']['open_now']):
+            # data we want: name, place_id, formatted_address, types,
+            # price_level, rating, open_now
             r = {
                 "name": restaurant["name"],
                 "place_id": restaurant["place_id"],
