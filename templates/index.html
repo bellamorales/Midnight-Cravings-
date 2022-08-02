@@ -6,10 +6,10 @@
 -->
 <html>
 	<head>
-		<title>Strata by HTML5 UP</title>
+		<title>Midnight Cravings</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
 	</head>
 	<body class="is-preload" style="background-color: #F7F7FF;">
 
@@ -38,11 +38,12 @@
 						<header class="major">
 							<h2 style= "padding-top: 50px; padding-right: 0px; padding-bottom: 30px;padding-left: 11px; text-align: right;">MIDNIGHT CRAVINGS</h2>
 						</header>
+
 						<p class = "bluetext" style= "padding-top: 100px; padding-right: 0px; padding-bottom: 30px;padding-left: 135px; text-align: center;" >Find what's open late near you</p>
           
 						<ul class="actions">
-              <li><a href="login.html" class="button">Log In</a></li>
-					    <li><a href="register.html" class="button">Sign Up</a></li>
+              				<li><a href="{{ url_for('login') }}" class="button">Log In</a></li>
+					   		<li><a href="{{ url_for('register') }}" class="button">Sign Up</a></li>
 						</ul>
 					</section>
 
@@ -136,12 +137,12 @@
 
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.poptrox.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+			<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/jquery.poptrox.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
 
 	</body>
 </html>
