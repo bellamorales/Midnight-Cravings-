@@ -9,8 +9,19 @@
 	</head>
   
   <body>
+	  
     <div class="container">
       <h1>Create Your Account</h1>
+	  {% with messages = get_flashed_messages(with_categories=true) %}
+  		{% if messages %}
+    		{% for category, message in messages %}
+       			<div class="alert alert-{{ category }}">
+         		{{ message }}
+      			</div>
+    		{% endfor %}
+  		{% endif %}
+		{% endwith %}
+
 	  <!-- form -->
 	  <form method="post" action="/register">
 	  {{ form.hidden_tag() }}
@@ -19,7 +30,7 @@
 			<div class="field half">
 				
         		<h2>First Name </h2>
-				{{ form.first_name.label(for="reg-name") }} 
+				{{ form.first_name.label(for="first_name") }} 
 				{% if form.first_name.errors %} 
 					{{ form.first_name() }}
 					<div>
@@ -36,7 +47,7 @@
       <!-- User's Last Name -->
 			<div class="field half">
         	<h2>Last Name </h2>
-				{{ form.last_name.label(for="reg-last-name") }} 
+				{{ form.last_name.label(for="last_name") }} 
 				{% if form.last_name.errors %} 
 					{{ form.last_name() }}
 					<div>
@@ -52,7 +63,7 @@
       <!-- User Email -->
 			<div class="field">
         <h2>Email</h2>
-				{{ form.email.label(for="reg-email") }} 
+				{{ form.email.label(for="email") }} 
 				{% if form.email.errors %} 
 					{{ form.email() }}
 					<div>
@@ -69,7 +80,7 @@
       <!-- User Password -->
 			<div class="field">
 				<h2>Password</h2>
-				{{ form.password.label(for="reg-password") }} 
+				{{ form.password.label(for="password") }} 
 				{% if form.password.errors %} 
 					{{ form.password() }}
 					<div>
