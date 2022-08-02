@@ -1,21 +1,37 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Login</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/loginsearch.css" />
-	</head>
 
-  <body>
-    <div>
-      <form action="/loginsearch.html" class="searchcontainer">
-       <input type="text" placeholder="Enter Location..">
-       <button type="submit"><img width="25px" src="assets/css/images/searchicon.png"</button>
-    </div>
-    
-    <div class="resultcontainer">
-      
-    </div>
-  </body>
+<head>
+  <title>Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/search.css') }}" />
+</head>
+
+<body>
+  <div>
+    <form action="/search.html" class="searchcontainer">
+      <input type="text" placeholder="Enter Location..">
+      <button type="submit"><img width="25px" src="static/images/searchicon.png" </button>
+  </div>
+
+  <div class="resultcontainer">
+    {% if restaurants is not none %}
+      {% for restaurant in restaurants %}
+        {% if not loop.last %}
+          <div class="restaurant-container">
+            <h1>{{ restaurant['name'] }}</h1>
+            <p>Location: {{ restaurant['formatted_address'] }}</p>
+            {% if restaurant['open_now'] %}
+              <p>Open now!</p>
+            {% endif %}
+            <p>Rating: {{ restaurant['rating'] }}</p>
+          </div>
+          <hr>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</body>
+
 </html>

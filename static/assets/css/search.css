@@ -9,8 +9,31 @@ body{
   margin: 3em;
   padding: 3em;
   width: 87%;
-  height: 37em;
 }
+
+.restaurant-container{
+  display:flow-root;
+  padding: 0.5em;
+  font-style: Abril Fatface;
+}
+
+.restaurant-container:hover {
+  color: #fff;
+  background-color: #383569;
+}
+
+.restaurant-container h1 {
+  text-align: left;
+  font-weight: 600;
+  font-size: 40px;
+}
+
+.restaurant-container p {
+  text-align: left;
+  font-weight: 200;
+  font-size: 24px;
+}
+
  .searchcontainer{
   background:rgba(255, 255, 255, 0.2);
   align-items: center;
