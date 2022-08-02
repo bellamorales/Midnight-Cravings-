@@ -1,21 +1,29 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Login</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/loginsearch.css') }}" />
-	</head>
 
-  <body>
-    <div>
-      <form action="/loginsearch.html" class="searchcontainer">
-       <input type="text" placeholder="Enter Location..">
-       <button type="submit"><img width="25px" src="static/assets/css/images/searchicon.png"</button>
-    </div>
-    
-    <div class="resultcontainer">
-      
-    </div>
-  </body>
+<head>
+  <title>Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/search.css') }}" />
+</head>
+
+<body>
+  <div>
+    <form action="/search.html" class="searchcontainer">
+      <input type="text" placeholder="Enter Location..">
+      <button type="submit"><img width="25px" src="static/images/searchicon.png" </button>
+  </div>
+
+  <div class="resultcontainer">
+    {% for restaurant in restaurants %}
+        
+
+      {% if not loop.last %}
+        <hr>
+      {% endif %}
+    {% endfor %}
+  </div>
+</body>
+
 </html>
