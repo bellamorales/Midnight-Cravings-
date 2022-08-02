@@ -1,31 +1,98 @@
-{% extends "layout.html" %} 
-{% block register %} 
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Register</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/loginsignup.css') }}" />
+	</head>
+  
+  <body>
     <div class="container">
       <h1>Create Your Account</h1>
+	  <!-- form -->
+	  <form method="post" action="/register">
+	  {{ form.hidden_tag() }}
+      <!-- User's First Name -->
+	  		<div class="stuff">
+			<div class="field half">
+				
+        		<h2>First Name </h2>
+				{{ form.first_name.label(for="reg-name") }} 
+				{% if form.first_name.errors %} 
+					{{ form.first_name() }}
+					<div>
+         				{% for error in form.first_name.errors%}
+             				<span>{{error}}</span>
+         				{% endfor %}
+       				</div>
+   				{% else %}
+       				{{ form.first_name() }}
+   				{% endif %}
+			</div>
+			<!-- display:inline-block; -->
       
-      <h2>First Name </h2>
+      <!-- User's Last Name -->
+			<div class="field half">
+        	<h2>Last Name </h2>
+				{{ form.last_name.label(for="reg-last-name") }} 
+				{% if form.last_name.errors %} 
+					{{ form.last_name() }}
+					<div>
+         				{% for error in form.last_name.errors%}
+             				<span>{{error}}</span>
+         				{% endfor %}
+       				</div>
+   				{% else %}
+       				{{ form.last_name() }}
+   				{% endif %}
+			</div>
 
-      <h2>Last Name</h2>
+      <!-- User Email -->
+			<div class="field">
+        <h2>Email</h2>
+				{{ form.email.label(for="reg-email") }} 
+				{% if form.email.errors %} 
+					{{ form.email() }}
+					<div>
+         				{% for error in form.email.errors%}
+             				<span>{{error}}</span>
+         				{% endfor %}
+       				</div>
+   				{% else %}
+       				{{ form.email() }}
+   				{% endif %}
+				
+			</div>
+      
+      <!-- User Password -->
+			<div class="field">
+				<h2>Password</h2>
+				{{ form.password.label(for="reg-password") }} 
+				{% if form.password.errors %} 
+					{{ form.password() }}
+					<div>
+         				{% for error in form.password.errors%}
+             				<span>{{error}}</span>
+         				{% endfor %}
+       				</div>
+   				{% else %}
+       				{{ form.password() }}
+   				{% endif %}
+			</div>
+	  </div>
 
-      <h2>Email</h2>
-
-      <h2>Password</h2>
-
-      <ul class="actions">
-        <li><a href="#" class="button">Sign Up</a></li>
-      </ul>
-
+      <div>
+                <ul class="actions">
+                    <li>{{ form.submit(class="button") }}</li>
+                    </ul>
+            </div>
+	  </form>
       <p><b>Already have a Midnight Cravings account?</b></p>
       <a href="{{ url_for('login') }}">Log In</a>
     </div>
-    
+  </body>
+</html>
 
-    <form method="post" action="/register">
-    {{ form.hidden_tag() }}
-    <fieldset class="form-group">
-      <div class="form-group">
-        {{ form.username.label(class="form-control-label") }} {% if form.username.errors %} {{ form.username(class="form-control form-control-lg is-invalid") }}
-        <div class="invalid-feedback"> {% for error in form.username.errors%} <span>{{error}}</span> {% endfor %} </div> {% else %} {{ form.username(class="form-control form-control-lg") }} {% endif %}
-      </div>
 
-{% endblock register %}
+
