@@ -56,26 +56,27 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit(): # checks if entries are valid
       if request.method == 'POST' and form.validate():
-        username = request.form.get('username')
+        firstname = request.form.get('first_name')
+        lastname = request.form.get('last_name')
         email = request.form.get('email')
-        user = User.query.filter_by(username=username).first()
-        another_user = User.query.filter_by(email=email).first()
+        #user = User.query.filter_by(username=username).first()
+        #another_user = User.query.filter_by(email=email).first()
 
-        print(user, another_user)
-        if user: # if a user is found, we want to redirect back to signup page so user can try again
-            message = Markup("<h4>Username already taken. Click <a href='/login'>here</a> to login <br> Click <a href='/'>here</a> to sign-up with a different username</h4>")
-            flash(message)
-            return render_template('blank.html')
-        elif another_user: # if a user is found, we want to redirect back to signup page so user can try again
-            message = Markup("<h4>Email already used. Click <a href='/login'>here</a> to login <br> Click <a href='/'>here</a> to sign-up with a different email</h4>")
-            flash(message)
-            return render_template('blank.html')
+        #print(user, another_user)
+        #if user: # if a user is found, we want to redirect back to signup page so user can try again
+            #message = Markup("<h4>Username already taken. Click <a href='/login'>here</a> to login <br> Click <a href='/'>here</a> to sign-up with a different username</h4>")
+            #flash(message)
+            #return render_template('blank.html')
+        #elif another_user: # if a user is found, we want to redirect back to signup page so user can try again
+            #message = Markup("<h4>Email already used. Click <a href='/login'>here</a> to login <br> Click <a href='/'>here</a> to sign-up with a different email</h4>")
+            #flash(message)
+            #return render_template('blank.html')
 
-        new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        new_user = User(firstname=form.first_name.data,lastname=form.last_name.data, email=form.email.data, password=form.password.data)
         db.session.add(new_user)
         db.session.commit()
         #flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('home')) # if so - send to home page
+        return redirect(url_for('index')) # if so - send to home page
     return render_template('register.html', title='Sign-Up', form=form)
 
 

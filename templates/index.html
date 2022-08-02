@@ -1,5 +1,33 @@
-{% extends "layout.html" %} 
-{% block home %}
+<!DOCTYPE html> 
+
+<html>
+<!-- HEAD -->
+	<head>
+		<title>Midnight Cravings</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
+		
+
+	</head>
+
+<!-- BODY -->
+	<body class="is-preload" style="background-color: #F7F7FF;">
+        <!-- Header -->
+			<header id="header">
+				<!-- <div class="inner">
+					<a href="#" class="image avatar"><img src="images/avatar.jpg" alt="" /></a>
+					<h1><strong>I am Strata</strong>, a super simple<br />
+					responsive site template freebie<br />
+					crafted by <a href="http://html5up.net">HTML5 UP</a>.</h1>
+				</div> -->
+			</header>
+
+		
+
+	</body>
+</html>
+
 <!-- Main -->
 <div id="main">
     <nav>
@@ -96,4 +124,14 @@
 						</div>
 					</section> -->
 </div>
-{% endblock home %}
+
+<!-- Scripts -->
+        <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/jquery.poptrox.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+</body>
+</html>
