@@ -1813,7 +1813,7 @@ input, select, textarea {
     font-family: 'Abril Fatface';
     font-style: normal;
     font-weight: 800;
-    font-size: 64px;
+    font-size: 66px;
     line-height: 86px;
     
     color: #1E2881;
@@ -1827,8 +1827,8 @@ input, select, textarea {
   
   font-family: 'Abril Fatface';
   font-style: normal;
-  font-weight: 400;
-  font-size: 43px;
+  font-weight: 500;
+  font-size: 52px;
   line-height: 58px;
   
   color: #3BB4F8;
@@ -2728,7 +2728,7 @@ footer h2{
   font-size: 32px ;
 }
 .footer_text{
- font-style: Abril Fatface; 
+ font-style: Abril Fatface;
  font-size: 24px ;
 }
 /* 	#footer .icons {
@@ -3334,11 +3334,10 @@ footer h2{
 	/*Nav Bar*/
 	nav {
 		overflow: hidden;
+    height: 6em;
+    width: 100%;
 		background-color: #062333;
-		position: fixed;
 		top: 0;
-		width: 50%;
-		margin-left: 30%;
 	  }
 /* 	nav ul {
 		list-style-type: none;
