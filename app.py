@@ -1,30 +1,33 @@
 from flask import Flask, render_template, url_for, flash, redirect,request, Markup
-from forms import RegistrationForm, LocationForm
+from forms import RegistrationForm, LocationForm, LoginForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager
 from place_details import get_nearby_restaurants
 from geo_code import get_coordinates
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
-
 app.config['SECRET_KEY'] = '159afc1053d04e47b66ac44bd36875fe'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  username = db.Column(db.String(20), unique=True, nullable=False)
+  first_name = db.Column(db.String(20), nullable=False)
+  last_name = db.Column(db.String(20), nullable=False)
   email = db.Column(db.String(120), unique=True, nullable=False)
   password = db.Column(db.String(60), nullable=False)
-  location = db.Column(db.String(200), nullable=False)
 
   def __repr__(self):
-    return f"User('{self.username}', '{self.email}')"
+    return f"User('{self.first_name}','{self.last_name}', '{self.email}')"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -54,44 +57,79 @@ def index():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
-    if form.validate_on_submit(): # checks if entries are valid
-      if request.method == 'POST' and form.validate():
-        username = request.form.get('username')
-        email = request.form.get('email')
-        user = User.query.filter_by(username=username).first()
-        another_user = User.query.filter_by(email=email).first()
+    # if form.validate_on_submit(): # checks if entries are valid
+    if request.method == 'POST':
+        # flash(f'Account created for {form.first_name.data}!', 'success')
+        # print("it is working")
+        # return redirect(url_for('index')) # if so - send to home page
+    # form = RegistrationForm()
+    # if form.validate_on_submit(): # checks if entries are valid
+    #   if request.method == 'POST' and form.validate():
+    #       # checks if entries are valid
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            return flash("User already exist")
+        password = request.form.get('password')
+        user = User(
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data,
+                    email=form.email.data,
+                    password=generate_password_hash(password, method='sha256'))
+        print(user)
 
-        print(user, another_user)
-        if user: # if a user is found, we want to redirect back to signup page so user can try again
-            message = Markup("<h4>Username already taken. Click <a href='/login'>here</a> to login <br> Click <a href='/'>here</a> to sign-up with a different username</h4>")
-            flash(message)
-            return render_template('blank.html')
-        elif another_user: # if a user is found, we want to redirect back to signup page so user can try again
-            message = Markup("<h4>Email already used. Click <a href='/login'>here</a> to login <br> Click <a href='/'>here</a> to sign-up with a different email</h4>")
-            flash(message)
-            return render_template('blank.html')
-
-        new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
-        db.session.add(new_user)
+        db.session.add(user)
         db.session.commit()
-        #flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('home')) # if so - send to home page
-    return render_template('register.html', title='Sign-Up', form=form)
+        flash(f'Account created for {form.first_name.data}!', 'success')
+
+        # send to login page after registering account
+        return redirect(url_for('login'))
+        # firstname = request.form.get('first_name')
+        # lastname = request.form.get('last_name')
+        # email = request.form.get('email')
+        # password = request.form.get('password')
+        # user = User(first_name=firstname.data,
+        #             last_name=lastname.data,
+        #             email=email.data,
+        #             location=city.data,
+        #             password=generate_password_hash(password, method='sha256'))
+        #another_user = User.query.filter_by(email=email).first()
+
+        #print(user, another_user)
+        #if user: # if a user is found, we want to redirect back to signup page so user can try again
+            #message = Markup("<h4>Username already taken. Click <a href='/login'>here</a> to login <br> Click <a href='/'>here</a> to sign-up with a different username</h4>")
+            #flash(message)
+            #return render_template('blank.html')
+        #elif another_user: # if a user is found, we want to redirect back to signup page so user can try again
+            #message = Markup("<h4>Email already used. Click <a href='/login'>here</a> to login <br> Click <a href='/'>here</a> to sign-up with a different email</h4>")
+            #flash(message)
+            #return render_template('blank.html')
+
+        # new_user = User(firstname=form.first_name.data,lastname=form.last_name.data, email=form.email.data, password=form.password.data)
+        # db.session.add(new_user)
+        # db.session.commit()
+        # #flash(f'Account created for {form.username.data}!', 'success')
+        # return redirect(url_for('index')) # if so - send to home page
+    return render_template('register.html', title='Register', form=form)
 
 
 # Route for handling the login page logic
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
     error = None
-    if request.method == 'POST':
-        user_name = request.form.get('username')
-        user = User.query.filter_by(username=user_name).first()
-        #if not user or not user.password:
-        if request.form['username'] != user.username or request.form['password'] != user.password:
-            error = 'Invalid Credentials. Please try again.'
-        else:
-            return redirect(url_for('home'))
-    return render_template('login.html', error=error)
+    if form.validate_on_submit():
+        if request.method == 'POST':
+            user_email = request.form.get('email')
+            user = User.query.filter_by(email=user_email).first()
+            print(user)
+            #if not user or not user.password:
+            # check_password_hash(user.password, password)
+            if request.form['email'] != user.email or check_password_hash(user.password, request.form['password']) == False:
+                error = 'Invalid Credentials. Please try again.'
+                print(error)
+            else:
+                return redirect(url_for('index'))
+    return render_template('login.html', error=error, form=form)
 
 
 if __name__ == '__main__':

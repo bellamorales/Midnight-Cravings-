@@ -1,19 +1,19 @@
-<!DOCTYPE HTML>
-<!--
-	Strata by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+<!DOCTYPE html> 
+
 <html>
+<!-- HEAD -->
 	<head>
 		<title>Midnight Cravings</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
-	</head>
-	<body class="is-preload" style="background-color: #F7F7FF;">
+		
 
-		<!-- Header -->
+	</head>
+
+<!-- BODY -->
+	<body class="is-preload" style="background-color: #F7F7FF;">
+        <!-- Header -->
 			<header id="header">
 				<!-- <div class="inner">
 					<a href="#" class="image avatar"><img src="images/avatar.jpg" alt="" /></a>
@@ -22,12 +22,16 @@
 					crafted by <a href="http://html5up.net">HTML5 UP</a>.</h1>
 				</div> -->
 			</header>
-			
 
-		<!-- Main -->
-			<div id="main">
-				<nav>
-<!-- 					<ul>
+		
+
+	</body>
+</html>
+
+<!-- Main -->
+<div id="main">
+    <nav>
+        <!-- 					<ul>
 					  <li><a href="login.html">Log In</a></li>
 					  <li><a href="signup.html">Sign Up</a></li>
 					</ul> -->
@@ -131,18 +135,15 @@
 							</div>
 						</div>
 					</section> -->
+</div>
 
-			</div>
+<!-- Scripts -->
+        <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/jquery.poptrox.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+        <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
 
-
-
-		<!-- Scripts -->
-			<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
-			<script src="{{ url_for('static', filename='assets/js/jquery.poptrox.min.js') }}"></script>
-			<script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
-			<script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
-			<script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
-			<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
-
-	</body>
+</body>
 </html>
