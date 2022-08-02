@@ -17,8 +17,14 @@
 
   <div class="resultcontainer">
     {% for restaurant in restaurants %}
-        
-
+      <div>
+        <h2>{{ restaurant['name'] }}</h2>
+        <p>Location: {{ restaurant['formatted_address'] }}</p>
+        {% if restaurant['open_now'] %}
+          <p>Open now!</p>
+        {% endif %}
+        <p>Rating: {{ restaurant['rating'] }}</p>
+      </div>
       {% if not loop.last %}
         <hr>
       {% endif %}
