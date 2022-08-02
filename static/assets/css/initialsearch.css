@@ -1,0 +1,56 @@
+body{
+  background-color: #062333;
+  text-align: center;
+}
+.container{
+  display: float;
+  float: inline-start;
+  background-image:url(/assets/css/images/foodbackgroundimage.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 3em;
+  padding: 3em;
+  width: 87%;
+  height: 37em;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+
+ .searchcontainer{
+  background:rgba(255, 255, 255, 0.2);
+  align-items: center;
+  display: flex;
+  border-radius:60px;
+  width: 100%;
+  padding:10px 20px;
+  max-width: 700px;
+  backdrop-filter: blur(4px)saturate(180%);
+  
+}
+/* Style the search box */
+.searchcontainer input[type=text] {
+  background: transparent;
+  flex:1;
+  float: center;
+  outline:none;
+  padding: 24px 20px;
+  border: none;
+  font-size: 20px;
+  color:#cac7ff;
+}
+
+.searchcontainer button img{
+ width:45px;
+ padding-top: 11px;
+}
+.searchcontainer button{
+  border:0;
+  border-radius: 50%;
+  width:60px;
+  height: 60px;
+  background: #58629b;
+  cursor: pointer;
+  
+}
