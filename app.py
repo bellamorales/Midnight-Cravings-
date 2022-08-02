@@ -21,13 +21,13 @@ login_manager.login_view = 'login'
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  first_name = db.Column(db.String(20), unique=True, nullable=False)
-  last_name = db.Column(db.String(20), unique=True, nullable=False)
+  first_name = db.Column(db.String(20), nullable=False)
+  last_name = db.Column(db.String(20), nullable=False)
   email = db.Column(db.String(120), unique=True, nullable=False)
   password = db.Column(db.String(60), nullable=False)
 
   def __repr__(self):
-    return f"User('{self.first_name}', '{self.email}')"
+    return f"User('{self.first_name}','{self.last_name}', '{self.email}')"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -119,13 +119,16 @@ def login():
     error = None
     if form.validate_on_submit():
         if request.method == 'POST':
-            user_name = request.form.get('username')
-            user = User.query.filter_by(username=user_name).first()
+            user_email = request.form.get('email')
+            user = User.query.filter_by(email=user_email).first()
+            print(user)
             #if not user or not user.password:
-            if request.form['username'] != user.username or request.form['password'] != user.password:
+            # check_password_hash(user.password, password)
+            if request.form['email'] != user.email or check_password_hash(user.password, request.form['password']) == False:
                 error = 'Invalid Credentials. Please try again.'
+                print(error)
             else:
-                return redirect(url_for('home'))
+                return redirect(url_for('index'))
     return render_template('login.html', error=error, form=form)
 
 
