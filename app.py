@@ -1,4 +1,6 @@
-from flask import Flask, render_template, url_for, flash, redirect,request, Markup
+from flask import (
+    Flask, render_template, url_for,
+    flash, redirect,request, Markup, g, session)
 from forms import RegistrationForm, LocationForm, LoginForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
@@ -6,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager
 from place_details import get_nearby_restaurants
 from geo_code import get_coordinates
+import functools
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
@@ -22,8 +25,8 @@ login_manager.login_view = 'login'
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  first_name = db.Column(db.String(20), nullable=False)
-  last_name = db.Column(db.String(20), nullable=False)
+  first_name = db.Column(db.String(20), unique=False, nullable=False)
+  last_name = db.Column(db.String(20), unique=False, nullable=False)
   email = db.Column(db.String(120), unique=True, nullable=False)
   password = db.Column(db.String(60), nullable=False)
 
@@ -34,16 +37,26 @@ class User(db.Model):
 def load_user(user_id):
     return User.get(user_id)
 
+def login_required(func):
+    @functools.wraps(func)
+    def secure_function(**kwargs):
+        if "email" not in session:
+            return redirect(url_for("login"))
+        return func(**kwargs)
+
+    return secure_function
+
 
 # Route for handling the search page logic (extends index)
 @app.route("/search", methods = ['GET','POST'])
+@login_required
 def search():
     form = LocationForm()
     if form.validate_on_submit():
         city = form.City.data
         restaurants = get_nearby_restaurants(get_coordinates(city))
         # TODO: insert user location into database ONLY IF USER IS LOGGED-IN
-        return render_template('search.html', form=form, restaurants=restaurants)
+        return render_template('search.html', form=form, email=session['email'], restaurants=restaurants)
 
     default_restaurants = get_nearby_restaurants(get_coordinates(default_city))
     return render_template("search.html", form=form, restaurants=default_restaurants)
@@ -130,8 +143,10 @@ def login():
                 error = 'Invalid Credentials. Please try again.'
                 print(error)
             else:
-                return redirect(url_for('index'))
-    return render_template('login.html', error=error, form=form)
+                session.clear()
+                session['email'] = user.email
+                return redirect(url_for('search'))
+    return render_template('login.html', email=session['email'], error=error, form=form)
 
 
 if __name__ == '__main__':
