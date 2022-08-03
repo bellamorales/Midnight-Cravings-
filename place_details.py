@@ -87,6 +87,8 @@ def get_nearby_restaurants(
                 api_response = client.places(
                     page_token=api_response["next_page_token"]
                 )
+        except KeyError:
+            break
         except googlemaps.exceptions.ApiError:
             message = f"ERRORED WITH NEXT_PAGE_TOKEN: {api_response['next_page_token']}"
             break
