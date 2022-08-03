@@ -75,10 +75,19 @@ def get_nearby_restaurants(
                     "place_id": restaurant["place_id"],
                     "formatted_address": restaurant["formatted_address"],
                     "types": restaurant["types"],
+                    'url': "https://www.google.com/maps/search/?api=1&query=" + restaurant["name"] +"&query_place_id=" + restaurant["place_id"],
+                    # "url":restaurant["photos"][0]["html_attributions"],
                     # "price_level": restaurant["price_level"],
                     "rating": restaurant["rating"],
                     "open_now": restaurant['opening_hours']['open_now']
                 }
+                # url contruction using name and place_id
+                name = r["name"]
+                url_name = name.replace(" ", "+")
+                url_name = url_name.replace(",", "%2C")
+                url_name = url_name.replace("&", "%26")
+
+                r['url'] = "https://www.google.com/maps/search/?api=1&query=" + url_name +"&query_place_id=" + restaurant["place_id"],
 
                 nearby_restaurants.append(r)
 
@@ -102,6 +111,7 @@ def get_nearby_restaurants(
 
 
 # restaurants = get_nearby_restaurants((42.580842, -87.821801))
+# print(restaurants)
 
 # print(json.dumps(restaurants, indent=4))
 # print(len(restaurants))
