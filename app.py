@@ -50,13 +50,23 @@ def login_required(func):
 @app.route("/search", methods = ['GET','POST'])
 # @login_required
 def search():
-    form = LocationForm()
     if request.method == 'POST':
         city = request.form['City']
         restaurants = get_nearby_restaurants(get_coordinates(city))
-        return render_template('search.html', form=form, restaurants=restaurants)
+        return render_template('search.html', restaurants=restaurants)
 
-    return render_template("search.html", form=form, restaurants=None)
+    return render_template("search.html", restaurants=None)
+
+
+# Route for handling the initial search page logic
+@app.route("/initialsearch", methods = ['GET','POST'])
+def initial_search():
+    if request.method == 'POST':
+        city = request.form['City']
+        restaurants = get_nearby_restaurants(get_coordinates(city))
+        return render_template('search.html', restaurants=restaurants)
+
+    return render_template("initialsearch.html")
 
 
 # Route for handling the index page logic
@@ -138,7 +148,7 @@ def login():
             if check_password_hash(user.password, password):
                 session.clear()
                 session['email'] = email
-                return redirect(url_for('search'))
+                return redirect(url_for('initial_search'))
             else:
                 error = 'Invalid Password. Please try again.'
         else:
