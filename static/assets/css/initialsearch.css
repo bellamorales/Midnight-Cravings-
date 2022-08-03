@@ -5,7 +5,7 @@ body{
 .container{
   display: float;
   float: inline-start;
-  background-image:url(/assets/css/images/foodbackgroundimage.jpg);
+  background-image:url(/static/images/foodbackgroundimage.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   margin: 3em;
