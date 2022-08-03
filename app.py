@@ -47,7 +47,7 @@ def login_required(func):
     return secure_function
 
 
-# Route for handling the search page logic (extends index)
+# Route for handling the main search page logic (extends index)
 @app.route("/search", methods = ['GET','POST'])
 @login_required
 def search():
@@ -133,20 +133,22 @@ def login():
     form = LoginForm()
     error = None
     if form.validate_on_submit():
-        if request.method == 'POST':
-            user_email = request.form.get('email')
-            user = User.query.filter_by(email=user_email).first()
-            print(user)
-            #if not user or not user.password:
-            # check_password_hash(user.password, password)
-            if request.form['email'] != user.email or check_password_hash(user.password, request.form['password']) == False:
-                error = 'Invalid Credentials. Please try again.'
-                print(error)
-            else:
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            if check_password_hash(user.password, password):
                 session.clear()
-                session['email'] = user.email
+                session['email'] = email
                 return redirect(url_for('search'))
-    return render_template('login.html', email=session['email'], error=error, form=form)
+            else:
+                error = 'Invalid Password. Please try again.'
+        else:
+            error = "Invalid email. Please try again."
+        return render_template('login.html', error=error, form=form)
+
+    return render_template('login.html', error=error, form=form)
 
 
 if __name__ == '__main__':
