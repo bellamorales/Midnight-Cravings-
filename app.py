@@ -16,7 +16,6 @@ proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = '159afc1053d04e47b66ac44bd36875fe'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
-default_city = "Chicago"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -49,17 +48,15 @@ def login_required(func):
 
 # Route for handling the main search page logic (extends index)
 @app.route("/search", methods = ['GET','POST'])
-@login_required
+# @login_required
 def search():
     form = LocationForm()
-    if form.validate_on_submit():
-        city = form.City.data
+    if request.method == 'POST':
+        city = request.form['City']
         restaurants = get_nearby_restaurants(get_coordinates(city))
-        # TODO: insert user location into database ONLY IF USER IS LOGGED-IN
-        return render_template('search.html', form=form, email=session['email'], restaurants=restaurants)
+        return render_template('search.html', form=form, restaurants=restaurants)
 
-    default_restaurants = get_nearby_restaurants(get_coordinates(default_city))
-    return render_template("search.html", form=form, restaurants=default_restaurants)
+    return render_template("search.html", form=form, restaurants=None)
 
 
 # Route for handling the index page logic
